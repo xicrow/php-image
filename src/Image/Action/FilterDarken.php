@@ -4,18 +4,12 @@ namespace Xicrow\PhpImage\Image\Action;
 use InvalidArgumentException;
 use Xicrow\PhpImage\Image\ActionBase;
 
-/**
- * Class FilterDarken
- *
- * @package Xicrow\PhpImage\Image\Action
- */
 class FilterDarken extends ActionBase
 {
 	protected int $iPercentage;
 
 	/**
-	 * @param int $iPercentage
-	 * @return void
+	 * @throws InvalidArgumentException
 	 */
 	protected static function ValidatePercentage(int $iPercentage): void
 	{
@@ -24,9 +18,6 @@ class FilterDarken extends ActionBase
 		}
 	}
 
-	/**
-	 * @param int $iPercentage
-	 */
 	public function __construct(int $iPercentage = 0)
 	{
 		static::ValidatePercentage($iPercentage);
@@ -34,26 +25,17 @@ class FilterDarken extends ActionBase
 		$this->iPercentage = $iPercentage;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getPercentage(): int
 	{
 		return $this->iPercentage;
 	}
 
-	/**
-	 * @return float
-	 */
 	public function getPercentageAsFloat(): float
 	{
 		return $this->iPercentage === 0 ? 0.0 : $this->iPercentage / 100;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setPercentage(int $iPercentage): self
+	public function setPercentage(int $iPercentage): static
 	{
 		static::ValidatePercentage($iPercentage);
 

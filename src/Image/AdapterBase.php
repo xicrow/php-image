@@ -4,30 +4,19 @@ namespace Xicrow\PhpImage\Image;
 use InvalidArgumentException;
 use Xicrow\PhpImage\Image\Exception\UnsupportedActionException;
 
-/**
- * Class AdapterBase
- *
- * @package Xicrow\PhpImage\Image
- */
 abstract class AdapterBase implements AdapterInterface
 {
 	/**
-	 * @var ActionInterface[]
+	 * @phpstan-var ActionInterface[]
 	 */
 	protected array $arrActionQueue = [];
 
-	/**
-	 * @inheritDoc
-	 */
 	public static function GetSupportedActions(): array
 	{
 		return [];
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function addAction(ActionInterface $oAction, bool $bFirst = false): self
+	public function addAction(ActionInterface $oAction, bool $bFirst = false): static
 	{
 		if (!in_array(get_class($oAction), static::GetSupportedActions(), true)) {
 			throw new UnsupportedActionException('Action not supported for this adapter: ' . get_class($oAction));
@@ -42,10 +31,7 @@ abstract class AdapterBase implements AdapterInterface
 		return $this;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function addActions(array $arrActions, bool $bFirst = false): self
+	public function addActions(array $arrActions, bool $bFirst = false): static
 	{
 		foreach ($arrActions as $oAction) {
 			if (!$oAction instanceof ActionInterface) {
@@ -66,10 +52,7 @@ abstract class AdapterBase implements AdapterInterface
 		return $this;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function removeActionByUID(ActionInterface $oAction): self
+	public function removeActionByUID(ActionInterface $oAction): static
 	{
 		foreach ($this->arrActionQueue as $iActionQueueIndex => $oActionQueueItem) {
 			if ($oActionQueueItem->getUID() === $oAction->getUID()) {
@@ -80,10 +63,7 @@ abstract class AdapterBase implements AdapterInterface
 		return $this;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function removeActionByClass(string $strActionClass): self
+	public function removeActionByClass(string $strActionClass): static
 	{
 		foreach ($this->arrActionQueue as $iActionQueueIndex => $oActionQueueItem) {
 			if ($oActionQueueItem instanceof $strActionClass) {
@@ -94,17 +74,11 @@ abstract class AdapterBase implements AdapterInterface
 		return $this;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getActionQueue(): array
 	{
 		return $this->arrActionQueue;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getActionQueueHash(): string
 	{
 		$arrActionUIDs = [];
@@ -115,13 +89,6 @@ abstract class AdapterBase implements AdapterInterface
 		return md5(implode('-', $arrActionUIDs));
 	}
 
-	/**
-	 * Get MIME type for a given file path
-	 *
-	 * @param string $strFilePath
-	 *
-	 * @return string
-	 */
 	protected static function GetMimeType(string $strFilePath): string
 	{
 		// Default MIME type to return, if not detected
@@ -136,7 +103,7 @@ abstract class AdapterBase implements AdapterInterface
 			$strMimeType = mime_content_type($strFilePath);
 		}
 
-		// Use PECL fileinfo to determine MIME type
+		// Use PECL file info to determine MIME type
 		if (!self::IsValidMimeType($strMimeType)) {
 			if (function_exists('finfo_open')) {
 				$rFinfo = @finfo_open(FILEINFO_MIME);
@@ -172,13 +139,6 @@ abstract class AdapterBase implements AdapterInterface
 		return $strMimeType;
 	}
 
-	/**
-	 * Check for valid MIME type
-	 *
-	 * @param string $strMimeType
-	 *
-	 * @return bool
-	 */
 	protected static function IsValidMimeType(string $strMimeType): bool
 	{
 		if (preg_match('/image\/(gif|jpg|jpeg|png)/i', $strMimeType)) {
@@ -189,11 +149,8 @@ abstract class AdapterBase implements AdapterInterface
 	}
 
 	/**
-	 * Convert hexadecimal color string to RGB
-	 *
-	 * @param string $strHex
-	 *
-	 * @return int[]
+	 * @phpstan-return array{0: float|int, 1: float|int, 2: float|int}
+	 * @throws InvalidArgumentException
 	 */
 	protected static function Hex2Rgb(string $strHex): array
 	{
@@ -219,14 +176,7 @@ abstract class AdapterBase implements AdapterInterface
 	}
 
 	/**
-	 * Calculate constrained image dimensions
-	 *
-	 * @param int $iCurrentWidth
-	 * @param int $iCurrentHeight
-	 * @param int $iMaxWidth
-	 * @param int $iMaxHeight
-	 *
-	 * @return array
+	 * @phpstan-return array{0: float|int, 1: float|int}
 	 */
 	protected static function ConstrainDimensions(int $iCurrentWidth, int $iCurrentHeight, int $iMaxWidth = 0, int $iMaxHeight = 0): array
 	{
@@ -266,7 +216,7 @@ abstract class AdapterBase implements AdapterInterface
 		$iHeight = intval($iCurrentHeight * $fRatio);
 
 		// Sometimes, due to rounding, we'll end up with a result like this: 465x700 in a 177x177 box is 117x176... a pixel short
-		// We also have issues with recursive calls resulting in an ever-changing result. Contraining to the result of a constraint should yield the original result.
+		// We also have issues with recursive calls resulting in an ever-changing result. Containing to the result of a constraint should yield the original result.
 		// Thus, we look for dimensions that are one pixel shy of the max value and bump them up
 		if ($bDidWidth && $iWidth === $iMaxWidth - 1) {
 			$iWidth = $iMaxWidth; // Round it up

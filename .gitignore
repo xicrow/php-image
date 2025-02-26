@@ -1,6 +1,3 @@
 .idea
-demo/webroot/images
-demo/webroot/processed
-demo/errors.log
 vendor
 composer.lock

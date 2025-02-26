@@ -4,11 +4,6 @@ namespace Xicrow\PhpImage\Image\Action;
 use InvalidArgumentException;
 use Xicrow\PhpImage\Image\ActionBase;
 
-/**
- * Class DrawText
- *
- * @package Xicrow\PhpImage\Image\Action
- */
 class DrawText extends ActionBase
 {
 	protected const ValidFontMimeTypes = ['font/ttf', 'font/truetype', 'font/sfnt'];
@@ -23,8 +18,7 @@ class DrawText extends ActionBase
 	protected float  $fTransparency;
 
 	/**
-	 * @param float $fTransparency
-	 * @return void
+	 * @throws InvalidArgumentException
 	 */
 	protected static function ValidateTransparency(float $fTransparency): void
 	{
@@ -34,8 +28,7 @@ class DrawText extends ActionBase
 	}
 
 	/**
-	 * @param float $fAngle
-	 * @return void
+	 * @throws InvalidArgumentException
 	 */
 	protected static function ValidateAngle(float $fAngle): void
 	{
@@ -45,8 +38,7 @@ class DrawText extends ActionBase
 	}
 
 	/**
-	 * @param string $strFontFile
-	 * @return void
+	 * @throws InvalidArgumentException
 	 */
 	protected static function ValidateFontFile(string $strFontFile): void
 	{
@@ -60,16 +52,6 @@ class DrawText extends ActionBase
 		}
 	}
 
-	/**
-	 * @param int    $iHorizontalPosition
-	 * @param int    $iVerticalPosition
-	 * @param string $strFontFile
-	 * @param int    $iSize
-	 * @param float  $fAngle
-	 * @param string $strContent
-	 * @param string $strColor
-	 * @param float  $fTransparency
-	 */
 	public function __construct(
 		int    $iHorizontalPosition = 0,
 		int    $iVerticalPosition = 0,
@@ -79,7 +61,8 @@ class DrawText extends ActionBase
 		string $strContent = '',
 		string $strColor = '#FFFFFF',
 		float  $fTransparency = 0.0
-	) {
+	)
+	{
 		static::ValidateFontFile($strFontFile);
 		static::ValidateAngle($fAngle);
 		static::ValidateTransparency($fTransparency);
@@ -94,18 +77,12 @@ class DrawText extends ActionBase
 		$this->fTransparency       = $fTransparency;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getVerticalPosition(): int
 	{
 		return $this->iVerticalPosition;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setVerticalPosition(int $iVerticalPosition): self
+	public function setVerticalPosition(int $iVerticalPosition): static
 	{
 		$oClone                    = clone $this;
 		$oClone->iVerticalPosition = $iVerticalPosition;
@@ -113,18 +90,12 @@ class DrawText extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getHorizontalPosition(): int
 	{
 		return $this->iHorizontalPosition;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setHorizontalPosition(int $iHorizontalPosition): self
+	public function setHorizontalPosition(int $iHorizontalPosition): static
 	{
 		$oClone                      = clone $this;
 		$oClone->iHorizontalPosition = $iHorizontalPosition;
@@ -132,18 +103,12 @@ class DrawText extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getFontFile(): string
 	{
 		return $this->strFontFile;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setFontFile(string $strFontFile): self
+	public function setFontFile(string $strFontFile): static
 	{
 		static::ValidateFontFile($strFontFile);
 
@@ -153,18 +118,12 @@ class DrawText extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getSize(): int
 	{
 		return $this->iSize;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setSize(int $iSize): self
+	public function setSize(int $iSize): static
 	{
 		$oClone        = clone $this;
 		$oClone->iSize = $iSize;
@@ -172,18 +131,12 @@ class DrawText extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return float
-	 */
 	public function getAngle(): float
 	{
 		return $this->fAngle;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setAngle(float $fAngle): self
+	public function setAngle(float $fAngle): static
 	{
 		static::ValidateAngle($fAngle);
 
@@ -193,18 +146,12 @@ class DrawText extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getContent(): string
 	{
 		return $this->strContent;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setContent(string $strContent): self
+	public function setContent(string $strContent): static
 	{
 		$oClone             = clone $this;
 		$oClone->strContent = $strContent;
@@ -212,18 +159,12 @@ class DrawText extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getColor(): string
 	{
 		return $this->strColor;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setColor(string $strColor): self
+	public function setColor(string $strColor): static
 	{
 		$oClone           = clone $this;
 		$oClone->strColor = $strColor;
@@ -231,18 +172,12 @@ class DrawText extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return float
-	 */
 	public function getTransparency(): float
 	{
 		return $this->fTransparency;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setTransparency(float $fTransparency): self
+	public function setTransparency(float $fTransparency): static
 	{
 		static::ValidateTransparency($fTransparency);
 

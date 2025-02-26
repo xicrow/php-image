@@ -1,32 +1,32 @@
 {
-	"name"       : "xicrow/php-image",
+	"name": "xicrow/php-image",
 	"description": "PHP image manipulation",
-	"type"       : "library",
-	"keywords"   : [
+	"type": "library",
+	"keywords": [
 		"php",
 		"image",
 		"manipulation",
 		"tools"
 	],
-	"license"    : "MIT",
-	"authors"    : [
+	"license": "MIT",
+	"authors": [
 		{
-			"name"    : "Jan Ebsen",
-			"email"   : "xicrow@gmail.com",
+			"name": "Jan Ebsen",
+			"email": "xicrow@gmail.com",
 			"homepage": "https://jan-ebsen.dk",
-			"role"    : "developer"
+			"role": "developer"
 		}
 	],
-	"support"    : {
+	"support": {
 		"issues": "https://github.com/xicrow/php-image/issues"
 	},
-	"require"    : {
-		"php"         : "^7.4",
-		"ext-json"    : "*",
+	"require": {
+		"php": "~8.0",
+		"ext-json": "*",
 		"ext-fileinfo": "*",
-		"ext-gd"      : "*"
+		"ext-gd": "*"
 	},
-	"autoload"   : {
+	"autoload": {
 		"psr-4": {
 			"Xicrow\\PhpImage\\": "src"
 		}

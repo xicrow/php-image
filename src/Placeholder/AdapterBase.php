@@ -1,25 +1,14 @@
 <?php
 namespace Xicrow\PhpImage\Placeholder;
 
-/**
- * Class AdapterBase
- *
- * @package Xicrow\PhpImage\Placeholder
- */
 abstract class AdapterBase implements AdapterInterface
 {
 	protected PlaceholderConfig $oPlaceholderConfig;
 
-	/**
-	 * @inheritDoc
-	 */
 	public static function ValidateConfig(PlaceholderConfig $oPlaceholderConfig): void
 	{
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function __construct(PlaceholderConfig $oPlaceholderConfig)
 	{
 		static::ValidateConfig($oPlaceholderConfig);
@@ -27,11 +16,6 @@ abstract class AdapterBase implements AdapterInterface
 		$this->oPlaceholderConfig = $oPlaceholderConfig;
 	}
 
-	/**
-	 * Utility method to get current URL protocol
-	 *
-	 * @return string
-	 */
 	protected function getCurrentUrlProtocol(): string
 	{
 		$protocol = 'http';

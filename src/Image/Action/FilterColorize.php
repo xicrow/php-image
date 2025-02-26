@@ -4,11 +4,6 @@ namespace Xicrow\PhpImage\Image\Action;
 use InvalidArgumentException;
 use Xicrow\PhpImage\Image\ActionBase;
 
-/**
- * Class FilterColorize
- *
- * @package Xicrow\PhpImage\Image\Action
- */
 class FilterColorize extends ActionBase
 {
 	protected int $iRedPercentage;
@@ -16,8 +11,7 @@ class FilterColorize extends ActionBase
 	protected int $iBluePercentage;
 
 	/**
-	 * @param int $iRedPercentage
-	 * @return void
+	 * @throws InvalidArgumentException
 	 */
 	public static function ValidateRedPercentage(int $iRedPercentage): void
 	{
@@ -26,10 +20,6 @@ class FilterColorize extends ActionBase
 		}
 	}
 
-	/**
-	 * @param int $iGreenPercentage
-	 * @return void
-	 */
 	public static function ValidateGreenPercentage(int $iGreenPercentage): void
 	{
 		if ($iGreenPercentage < -100 || $iGreenPercentage > 100) {
@@ -37,10 +27,6 @@ class FilterColorize extends ActionBase
 		}
 	}
 
-	/**
-	 * @param int $iBluePercentage
-	 * @return void
-	 */
 	public static function ValidateBluePercentage(int $iBluePercentage): void
 	{
 		if ($iBluePercentage < -100 || $iBluePercentage > 100) {
@@ -48,11 +34,6 @@ class FilterColorize extends ActionBase
 		}
 	}
 
-	/**
-	 * @param int $iRedPercentage
-	 * @param int $iGreenPercentage
-	 * @param int $iBluePercentage
-	 */
 	public function __construct(int $iRedPercentage = 0, int $iGreenPercentage = 0, int $iBluePercentage = 0)
 	{
 		static::ValidateRedPercentage($iRedPercentage);
@@ -64,26 +45,17 @@ class FilterColorize extends ActionBase
 		$this->iBluePercentage  = $iBluePercentage;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getRedPercentage(): int
 	{
 		return $this->iRedPercentage;
 	}
 
-	/**
-	 * @return float
-	 */
 	public function getRedPercentageAsFloat(): float
 	{
 		return $this->iRedPercentage === 0 ? 0.0 : $this->iRedPercentage / 100;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setRedPercentage(int $iRedPercentage): self
+	public function setRedPercentage(int $iRedPercentage): static
 	{
 		static::ValidateRedPercentage($iRedPercentage);
 
@@ -93,26 +65,17 @@ class FilterColorize extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getGreenPercentage(): int
 	{
 		return $this->iGreenPercentage;
 	}
 
-	/**
-	 * @return float
-	 */
 	public function getGreenPercentageAsFloat(): float
 	{
 		return $this->iGreenPercentage === 0 ? 0.0 : $this->iGreenPercentage / 100;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setGreenPercentage(int $iGreenPercentage): self
+	public function setGreenPercentage(int $iGreenPercentage): static
 	{
 		static::ValidateGreenPercentage($iGreenPercentage);
 
@@ -122,26 +85,17 @@ class FilterColorize extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getBluePercentage(): int
 	{
 		return $this->iBluePercentage;
 	}
 
-	/**
-	 * @return float
-	 */
 	public function getBluePercentageAsFloat(): float
 	{
 		return $this->iBluePercentage === 0 ? 0.0 : $this->iBluePercentage / 100;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setBluePercentage(int $iBluePercentage): self
+	public function setBluePercentage(int $iBluePercentage): static
 	{
 		static::ValidateBluePercentage($iBluePercentage);
 

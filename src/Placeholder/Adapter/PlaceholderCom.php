@@ -5,18 +5,10 @@ use Xicrow\PhpImage\Placeholder\AdapterBase;
 use Xicrow\PhpImage\Placeholder\Exception\InvalidConfigurationException;
 use Xicrow\PhpImage\Placeholder\PlaceholderConfig;
 
-/**
- * Class PlaceholderCom
- *
- * @package Xicrow\PhpImage\Placeholder\Adapter
- */
 class PlaceholderCom extends AdapterBase
 {
 	private const ValidFileExtensions = ['gif', 'jpg', 'jpeg', 'png', 'webp'];
 
-	/**
-	 * @inheritDoc
-	 */
 	public static function ValidateConfig(PlaceholderConfig $oPlaceholderConfig): void
 	{
 		if ($oPlaceholderConfig->getWidth() === 0) {
@@ -32,9 +24,6 @@ class PlaceholderCom extends AdapterBase
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getUrl(): string
 	{
 		$arrUrlParts = [

@@ -3,16 +3,8 @@ namespace Xicrow\PhpImage\Placeholder\Adapter;
 
 use Xicrow\PhpImage\Placeholder\AdapterBase;
 
-/**
- * Class PlaceholdersDev
- *
- * @package Xicrow\PhpImage\Placeholder\Adapter
- */
 class PlaceholdersDev extends AdapterBase
 {
-	/**
-	 * @inheritDoc
-	 */
 	public function getUrl(): string
 	{
 		$strUrl = $this->getCurrentUrlProtocol() . '://images.placeholders.dev/';

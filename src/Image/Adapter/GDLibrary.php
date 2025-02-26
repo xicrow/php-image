@@ -2,6 +2,9 @@
 namespace Xicrow\PhpImage\Image\Adapter;
 
 use RuntimeException;
+use Xicrow\PhpImage\Image\Action\DrawLine;
+use Xicrow\PhpImage\Image\Action\DrawRectangle;
+use Xicrow\PhpImage\Image\Action\DrawText;
 use Xicrow\PhpImage\Image\Action\FilterBrighten;
 use Xicrow\PhpImage\Image\Action\FilterColorize;
 use Xicrow\PhpImage\Image\Action\FilterContrast;
@@ -17,51 +20,21 @@ use Xicrow\PhpImage\Image\Action\FilterScatter;
 use Xicrow\PhpImage\Image\Action\FilterSelectiveBlur;
 use Xicrow\PhpImage\Image\Action\FilterSharpen;
 use Xicrow\PhpImage\Image\Action\FilterSmooth;
-use Xicrow\PhpImage\Image\Action\DrawLine;
-use Xicrow\PhpImage\Image\Action\DrawRectangle;
-use Xicrow\PhpImage\Image\Action\DrawText;
 use Xicrow\PhpImage\Image\Action\ResizeCrop;
 use Xicrow\PhpImage\Image\Action\ResizeFit;
 use Xicrow\PhpImage\Image\AdapterBase;
 
-/**
- * Class GDLibrary
- *
- * @package Xicrow\PhpImage\Image\Adapter
- */
 class GDLibrary extends AdapterBase
 {
-	/**
-	 * Resource for original image
-	 *
-	 * @var null|resource
-	 */
+	/** @phpstan-var null|resource */
 	protected $rOriginal = null;
 
-	/**
-	 * Resource for current modified image
-	 *
-	 * @var null|resource
-	 */
+	/** @phpstan-var null|resource */
 	protected $rCurrent = null;
 
-	/**
-	 * Image URL
-	 *
-	 * @var string
-	 */
-	protected string $strImagePath;
+	protected string      $strImagePath;
+	protected string|null $strMimeType = null;
 
-	/**
-	 * MIME type of the image
-	 *
-	 * @var null|string
-	 */
-	protected ?string $strMimeType = null;
-
-	/**
-	 * @inheritDoc
-	 */
 	public static function GetSupportedActions(): array
 	{
 		return [
@@ -90,9 +63,6 @@ class GDLibrary extends AdapterBase
 		];
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function __construct(string $strImagePath)
 	{
 		if (!function_exists('imagecreatetruecolor')) {
@@ -104,24 +74,21 @@ class GDLibrary extends AdapterBase
 		$this->strMimeType  = self::GetMimeType($strImagePath);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function save(string $strFilePath, int $iQuality): bool
 	{
 		switch ($this->strMimeType) {
 			case self::MimeType_ImageGif:
 				$this->rOriginal = imagecreatefromgif($this->strImagePath);
-			break;
+				break;
 
 			case self::MimeType_ImageJpg:
 				@ini_set('gd.jpeg_ignore_warning', 1);
 				$this->rOriginal = imagecreatefromjpeg($this->strImagePath);
-			break;
+				break;
 
 			case self::MimeType_ImagePng:
 				$this->rOriginal = imagecreatefrompng($this->strImagePath);
-			break;
+				break;
 
 			default:
 				throw new RuntimeException('MIME type not supported: ' . $this->strMimeType);
@@ -134,82 +101,82 @@ class GDLibrary extends AdapterBase
 				// Draw
 				case $oAction instanceof DrawLine:
 					$this->processDrawLine($oAction);
-				break;
+					break;
 				case $oAction instanceof DrawRectangle:
 					$this->processDrawRectangle($oAction);
-				break;
+					break;
 				case $oAction instanceof DrawText:
 					$this->processDrawText($oAction);
-				break;
+					break;
 
 				// Filters
 				case $oAction instanceof FilterBrighten:
 					$this->processFilterBrighten($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterColorize:
 					$this->processFilterColorize($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterContrast:
 					$this->processFilterContrast($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterDarken:
 					$this->processFilterDarken($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterEdgeDetect:
 					$this->processFilterEdgeDetect($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterEmboss:
 					$this->processFilterEmboss($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterGaussianBlur:
 					$this->processFilterGaussianBlur($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterGreyScale:
 					$this->processFilterGreyScale($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterInvert:
 					$this->processFilterInvertColors($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterMeanRemoval:
 					$this->processFilterMeanRemoval($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterPixelate:
 					$this->processFilterPixelate($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterScatter:
 					$this->processFilterScatter($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterSelectiveBlur:
 					$this->processFilterSelectiveBlur($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterSharpen:
 					$this->processFilterSharpen($oAction);
-				break;
+					break;
 
 				case $oAction instanceof FilterSmooth:
 					$this->processFilterSmooth($oAction);
-				break;
+					break;
 
 				// Resize
 				case $oAction instanceof ResizeCrop:
 					$this->processResizeCrop($oAction);
-				break;
+					break;
 				case $oAction instanceof ResizeFit:
 					$this->processResizeFit($oAction);
-				break;
+					break;
 			}
 		}
 
@@ -218,19 +185,12 @@ class GDLibrary extends AdapterBase
 			mkdir($strFolderPath, 0755, true);
 		}
 
-		switch ($this->strMimeType) {
-			case self::MimeType_ImagePng:
-				return imagepng($this->rCurrent, $strFilePath, 9);
-
-			default:
-				return imagejpeg($this->rCurrent, $strFilePath, $iQuality);
-		}
+		return match ($this->strMimeType) {
+			self::MimeType_ImagePng => imagepng($this->rCurrent, $strFilePath, 9),
+			default                 => imagejpeg($this->rCurrent, $strFilePath, $iQuality),
+		};
 	}
 
-	/**
-	 * @param FilterBrighten $oAction
-	 * @return void
-	 */
 	protected function processFilterBrighten(FilterBrighten $oAction): void
 	{
 		$iLevel = 255 * $oAction->getPercentageAsFloat();
@@ -238,10 +198,6 @@ class GDLibrary extends AdapterBase
 		imagefilter($this->rCurrent, IMG_FILTER_BRIGHTNESS, $iLevel);
 	}
 
-	/**
-	 * @param FilterColorize $oAction
-	 * @return void
-	 */
 	protected function processFilterColorize(FilterColorize $oAction): void
 	{
 		$iRedLevel   = 255 * $oAction->getRedPercentageAsFloat();
@@ -251,10 +207,6 @@ class GDLibrary extends AdapterBase
 		imagefilter($this->rCurrent, IMG_FILTER_COLORIZE, $iRedLevel, $iGreenLevel, $iBlueLevel);
 	}
 
-	/**
-	 * @param FilterContrast $oAction
-	 * @return void
-	 */
 	protected function processFilterContrast(FilterContrast $oAction): void
 	{
 		$iLevel = $oAction->getPercentage() * -1;
@@ -262,10 +214,6 @@ class GDLibrary extends AdapterBase
 		imagefilter($this->rCurrent, IMG_FILTER_CONTRAST, $iLevel);
 	}
 
-	/**
-	 * @param FilterDarken $oAction
-	 * @return void
-	 */
 	protected function processFilterDarken(FilterDarken $oAction): void
 	{
 		$iLevel = -255 * $oAction->getPercentageAsFloat();
@@ -273,91 +221,51 @@ class GDLibrary extends AdapterBase
 		imagefilter($this->rCurrent, IMG_FILTER_BRIGHTNESS, $iLevel);
 	}
 
-	/**
-	 * @param FilterEdgeDetect $oAction
-	 * @return void
-	 */
 	protected function processFilterEdgeDetect(FilterEdgeDetect $oAction): void
 	{
 		imagefilter($this->rCurrent, IMG_FILTER_EDGEDETECT);
 	}
 
-	/**
-	 * @param FilterEmboss $oAction
-	 * @return void
-	 */
 	protected function processFilterEmboss(FilterEmboss $oAction): void
 	{
 		imagefilter($this->rCurrent, IMG_FILTER_EMBOSS);
 	}
 
-	/**
-	 * @param FilterGaussianBlur $oAction
-	 * @return void
-	 */
 	protected function processFilterGaussianBlur(FilterGaussianBlur $oAction): void
 	{
 		imagefilter($this->rCurrent, IMG_FILTER_GAUSSIAN_BLUR);
 	}
 
-	/**
-	 * @param FilterGreyScale $oAction
-	 * @return void
-	 */
 	protected function processFilterGreyScale(FilterGreyScale $oAction): void
 	{
 		imagefilter($this->rCurrent, IMG_FILTER_GRAYSCALE);
 	}
 
-	/**
-	 * @param FilterInvert $oAction
-	 * @return void
-	 */
 	protected function processFilterInvertColors(FilterInvert $oAction): void
 	{
 		imagefilter($this->rCurrent, IMG_FILTER_NEGATE);
 	}
 
-	/**
-	 * @param FilterMeanRemoval $oAction
-	 * @return void
-	 */
 	protected function processFilterMeanRemoval(FilterMeanRemoval $oAction): void
 	{
 		imagefilter($this->rCurrent, IMG_FILTER_MEAN_REMOVAL);
 	}
 
-	/**
-	 * @param FilterPixelate $oAction
-	 * @return void
-	 */
 	protected function processFilterPixelate(FilterPixelate $oAction): void
 	{
 		imagefilter($this->rCurrent, IMG_FILTER_PIXELATE, $oAction->getBlockSizeInPixels(), $oAction->getUseAdvancedPixelation());
 	}
 
-	/**
-	 * @param FilterScatter $oAction
-	 * @return void
-	 */
 	protected function processFilterScatter(FilterScatter $oAction): void
 	{
-		imagefilter($this->rCurrent, IMG_FILTER_SCATTER, $oAction->getSubstractionLevel(), $oAction->getAdditionLevel());
+		imagefilter($this->rCurrent, IMG_FILTER_SCATTER, $oAction->getSubtractionLevel(), $oAction->getAdditionLevel());
 	}
 
-	/**
-	 * @param FilterSelectiveBlur $oAction
-	 * @return void
-	 */
 	protected function processFilterSelectiveBlur(FilterSelectiveBlur $oAction): void
 	{
 		imagefilter($this->rCurrent, IMG_FILTER_SELECTIVE_BLUR);
 	}
 
-	/**
-	 * @param FilterSharpen $oAction
-	 * @return void
-	 */
 	protected function processFilterSharpen(FilterSharpen $oAction): void
 	{
 		$iLevel = -10 * $oAction->getPercentageAsFloat();
@@ -365,10 +273,6 @@ class GDLibrary extends AdapterBase
 		imagefilter($this->rCurrent, IMG_FILTER_SMOOTH, $iLevel);
 	}
 
-	/**
-	 * @param FilterSmooth $oAction
-	 * @return void
-	 */
 	protected function processFilterSmooth(FilterSmooth $oAction): void
 	{
 		$iLevel = 10 * $oAction->getPercentageAsFloat();
@@ -376,10 +280,6 @@ class GDLibrary extends AdapterBase
 		imagefilter($this->rCurrent, IMG_FILTER_SMOOTH, $iLevel);
 	}
 
-	/**
-	 * @param DrawLine $oAction
-	 * @return void
-	 */
 	protected function processDrawLine(DrawLine $oAction): void
 	{
 		if ($oAction->getTransparency() > 0) {
@@ -400,10 +300,6 @@ class GDLibrary extends AdapterBase
 		}
 	}
 
-	/**
-	 * @param DrawRectangle $oAction
-	 * @return void
-	 */
 	protected function processDrawRectangle(DrawRectangle $oAction): void
 	{
 		if ($oAction->getTransparency() > 0) {
@@ -424,10 +320,6 @@ class GDLibrary extends AdapterBase
 		}
 	}
 
-	/**
-	 * @param DrawText $oAction
-	 * @return void
-	 */
 	protected function processDrawText(DrawText $oAction): void
 	{
 		if ($oAction->getContent() === '') {
@@ -454,10 +346,6 @@ class GDLibrary extends AdapterBase
 		}
 	}
 
-	/**
-	 * @param ResizeCrop $oAction
-	 * @return void
-	 */
 	protected function processResizeCrop(ResizeCrop $oAction): void
 	{
 		// Get current width and height
@@ -518,7 +406,7 @@ class GDLibrary extends AdapterBase
 		// Calculate destination X and Y coordinates
 		switch ($oAction->getHorizontalAlignment()) {
 			case ResizeCrop::Horizontal_Align_Left:
-			break;
+				break;
 
 			case ResizeCrop::Horizontal_Align_Center:
 				if (!$bIsUnderSized) {
@@ -526,7 +414,7 @@ class GDLibrary extends AdapterBase
 				} else {
 					$dstX = (($oAction->getWidth() - $srcW) / 2);
 				}
-			break;
+				break;
 
 			case ResizeCrop::Horizontal_Align_Right:
 				if (!$bIsUnderSized) {
@@ -534,7 +422,7 @@ class GDLibrary extends AdapterBase
 				} else {
 					$dstX = ($oAction->getWidth() - $srcW);
 				}
-			break;
+				break;
 
 			default:
 				// @todo Throw more specific exception
@@ -543,7 +431,7 @@ class GDLibrary extends AdapterBase
 
 		switch ($oAction->getVerticalAlignment()) {
 			case ResizeCrop::Vertical_Align_Top:
-			break;
+				break;
 
 			case ResizeCrop::Vertical_Align_Middle:
 				if (!$bIsUnderSized) {
@@ -551,7 +439,7 @@ class GDLibrary extends AdapterBase
 				} else {
 					$dstY = (($oAction->getHeight() - $srcH) / 2);
 				}
-			break;
+				break;
 
 			case ResizeCrop::Vertical_Align_Bottom:
 				if (!$bIsUnderSized) {
@@ -559,7 +447,7 @@ class GDLibrary extends AdapterBase
 				} else {
 					$dstY = ($oAction->getHeight() - $srcH);
 				}
-			break;
+				break;
 
 			default:
 				// @todo Throw more specific exception
@@ -572,7 +460,7 @@ class GDLibrary extends AdapterBase
 			$strBackground = $oAction->getBackgroundColor();
 		}
 
-		if ($strBackground !== ResizeCrop::Background_Color_Transparent && (strlen($strBackground) !== 7 || substr($strBackground, 0, 1) !== '#')) {
+		if ($strBackground !== ResizeCrop::Background_Color_Transparent && (strlen($strBackground) !== 7 || !str_starts_with($strBackground, '#'))) {
 			$strBackground = ResizeCrop::Background_Color_Transparent;
 		}
 
@@ -614,10 +502,6 @@ class GDLibrary extends AdapterBase
 		$this->rCurrent = $rTemp;
 	}
 
-	/**
-	 * @param ResizeFit $oAction
-	 * @return void
-	 */
 	protected function processResizeFit(ResizeFit $oAction): void
 	{
 		// Get current width and height
@@ -681,26 +565,26 @@ class GDLibrary extends AdapterBase
 		// Calculate destination X and Y coordinates
 		switch ($oAction->getHorizontalAlignment()) {
 			case ResizeFit::Horizontal_Align_Left:
-			break;
+				break;
 			case ResizeFit::Horizontal_Align_Center:
 				$dstX = ($iCanvasWidth - $dstW) / 2;
-			break;
+				break;
 			case ResizeFit::Horizontal_Align_Right:
 				$dstX = $iCanvasWidth - $dstW;
-			break;
+				break;
 			default:
 				// @todo Throw more specific exception
 				throw new RuntimeException('Unknown horizontal alignment: ' . $oAction->getHorizontalAlignment());
 		}
 		switch ($oAction->getVerticalAlignment()) {
 			case ResizeFit::Vertical_Align_Top:
-			break;
+				break;
 			case ResizeFit::Vertical_Align_Middle:
 				$dstY = (($iCanvasHeight - $dstH) / 2);
-			break;
+				break;
 			case ResizeFit::Vertical_Align_Bottom:
 				$dstY = ($iCanvasHeight - $dstH);
-			break;
+				break;
 			default:
 				// @todo Throw more specific exception
 				throw new RuntimeException('Unknown vertical alignment: ' . $oAction->getVerticalAlignment());
@@ -712,7 +596,7 @@ class GDLibrary extends AdapterBase
 			$strBackground = $oAction->getBackgroundColor();
 		}
 
-		if ($strBackground !== ResizeFit::Background_Color_Transparent && (strlen($strBackground) !== 7 || substr($strBackground, 0, 1) !== '#')) {
+		if ($strBackground !== ResizeFit::Background_Color_Transparent && (strlen($strBackground) !== 7 || !str_starts_with($strBackground, '#'))) {
 			$strBackground = ResizeFit::Background_Color_Transparent;
 		}
 
@@ -754,15 +638,6 @@ class GDLibrary extends AdapterBase
 		$this->rCurrent = $rTemp;
 	}
 
-	/**
-	 * Get color identifier from red-green-blue color
-	 *
-	 * @param int   $iRed
-	 * @param int   $iGreen
-	 * @param int   $iBlue
-	 * @param float $fAlpha Transparency level in percent (0 for opaque, 100 for transparent)
-	 * @return int
-	 */
 	private function getColorIdentifierFromRGB(int $iRed, int $iGreen, int $iBlue, float $fAlpha = 0.0): int
 	{
 		if ($fAlpha > 0 && $fAlpha <= 100) {
@@ -772,13 +647,6 @@ class GDLibrary extends AdapterBase
 		return imagecolorallocate($this->rCurrent, $iRed, $iGreen, $iBlue);
 	}
 
-	/**
-	 * Get color identifier from hexadecimal color
-	 *
-	 * @param string $strHexColor
-	 * @param float  $fTransparency Transparency level in percent (0 for opaque, 100 for transparent)
-	 * @return int
-	 */
 	private function getColorIdentifierFromHex(string $strHexColor, float $fTransparency = 0.0): int
 	{
 		$arrColorRgb = self::Hex2Rgb($strHexColor);

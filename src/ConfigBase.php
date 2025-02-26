@@ -1,17 +1,9 @@
 <?php
 namespace Xicrow\PhpImage;
 
-/**
- * Class ConfigBase
- *
- * @package Xicrow\PhpImage
- */
 abstract class ConfigBase implements ConfigInterface
 {
-	/**
-	 * @inheritDoc
-	 */
-	public static function CreateFromArray(array $arrData): self
+	public static function CreateFromArray(array $arrData): static
 	{
 		$oInstance = new static();
 		foreach ($arrData as $strProperty => $mValue) {
@@ -21,17 +13,11 @@ abstract class ConfigBase implements ConfigInterface
 		return $oInstance;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function CreateFromJson(string $strJson): self
+	public static function CreateFromJson(string $strJson): static
 	{
 		return static::CreateFromArray(json_decode($strJson, true, 512, JSON_THROW_ON_ERROR));
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function toArray(): array
 	{
 		$arrData = [];
@@ -46,9 +32,6 @@ abstract class ConfigBase implements ConfigInterface
 		return $arrData;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function toJson(): string
 	{
 		return json_encode($this->toArray(), JSON_THROW_ON_ERROR);

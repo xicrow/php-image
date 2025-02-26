@@ -4,11 +4,6 @@ namespace Xicrow\PhpImage\Image\Action;
 use InvalidArgumentException;
 use Xicrow\PhpImage\Image\ActionBase;
 
-/**
- * Class DrawRectangle
- *
- * @package Xicrow\PhpImage\Image\Action
- */
 class DrawRectangle extends ActionBase
 {
 	protected int    $iHorizontalPosition;
@@ -19,8 +14,7 @@ class DrawRectangle extends ActionBase
 	protected float  $fTransparency;
 
 	/**
-	 * @param float $fTransparency
-	 * @return void
+	 * @throws InvalidArgumentException
 	 */
 	protected static function ValidateTransparency(float $fTransparency): void
 	{
@@ -29,14 +23,6 @@ class DrawRectangle extends ActionBase
 		}
 	}
 
-	/**
-	 * @param int    $iHorizontalPosition
-	 * @param int    $iVerticalPosition
-	 * @param int    $iWidth
-	 * @param int    $iHeight
-	 * @param string $strColor
-	 * @param float  $fTransparency
-	 */
 	public function __construct(
 		int    $iHorizontalPosition = 0,
 		int    $iVerticalPosition = 0,
@@ -44,7 +30,8 @@ class DrawRectangle extends ActionBase
 		int    $iHeight = 10,
 		string $strColor = '#FFFFFF',
 		float  $fTransparency = 0.0
-	) {
+	)
+	{
 		static::ValidateTransparency($fTransparency);
 
 		$this->iHorizontalPosition = $iHorizontalPosition;
@@ -55,18 +42,12 @@ class DrawRectangle extends ActionBase
 		$this->fTransparency       = $fTransparency;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getHorizontalPosition(): int
 	{
 		return $this->iHorizontalPosition;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setHorizontalPosition(int $iHorizontalPosition): self
+	public function setHorizontalPosition(int $iHorizontalPosition): static
 	{
 		$oClone                      = clone $this;
 		$oClone->iHorizontalPosition = $iHorizontalPosition;
@@ -74,18 +55,12 @@ class DrawRectangle extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getVerticalPosition(): int
 	{
 		return $this->iVerticalPosition;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setVerticalPosition(int $iVerticalPosition): self
+	public function setVerticalPosition(int $iVerticalPosition): static
 	{
 		$oClone                    = clone $this;
 		$oClone->iVerticalPosition = $iVerticalPosition;
@@ -93,18 +68,12 @@ class DrawRectangle extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getWidth(): int
 	{
 		return $this->iWidth;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setWidth(int $iWidth): self
+	public function setWidth(int $iWidth): static
 	{
 		$oClone         = clone $this;
 		$oClone->iWidth = $iWidth;
@@ -112,18 +81,12 @@ class DrawRectangle extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getHeight(): int
 	{
 		return $this->iHeight;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setHeight(int $iHeight): self
+	public function setHeight(int $iHeight): static
 	{
 		$oClone          = clone $this;
 		$oClone->iHeight = $iHeight;
@@ -131,18 +94,12 @@ class DrawRectangle extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getColor(): string
 	{
 		return $this->strColor;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setColor(string $strColor): self
+	public function setColor(string $strColor): static
 	{
 		$oClone           = clone $this;
 		$oClone->strColor = $strColor;
@@ -150,18 +107,12 @@ class DrawRectangle extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return float
-	 */
 	public function getTransparency(): float
 	{
 		return $this->fTransparency;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setTransparency(float $fTransparency): self
+	public function setTransparency(float $fTransparency): static
 	{
 		static::ValidateTransparency($fTransparency);
 

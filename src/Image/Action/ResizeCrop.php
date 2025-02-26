@@ -3,11 +3,6 @@ namespace Xicrow\PhpImage\Image\Action;
 
 use Xicrow\PhpImage\Image\ActionBase;
 
-/**
- * Class ResizeCrop
- *
- * @package Xicrow\PhpImage\Image\Action
- */
 class ResizeCrop extends ActionBase
 {
 	public const Vertical_Align_Top    = 'top';
@@ -27,14 +22,6 @@ class ResizeCrop extends ActionBase
 	protected string $strHorizontalAlignment;
 	protected string $strBackgroundColor;
 
-	/**
-	 * @param int    $iWidth
-	 * @param int    $iHeight
-	 * @param bool   $bAllowStretching
-	 * @param string $strVerticalAlignment
-	 * @param string $strHorizontalAlignment
-	 * @param string $strBackgroundColor
-	 */
 	public function __construct(
 		int    $iWidth = 0,
 		int    $iHeight = 0,
@@ -42,7 +29,8 @@ class ResizeCrop extends ActionBase
 		string $strVerticalAlignment = self::Vertical_Align_Middle,
 		string $strHorizontalAlignment = self::Horizontal_Align_Center,
 		string $strBackgroundColor = self::Background_Color_Transparent
-	) {
+	)
+	{
 		$this->iWidth                 = $iWidth;
 		$this->iHeight                = $iHeight;
 		$this->bAllowStretching       = $bAllowStretching;
@@ -51,18 +39,12 @@ class ResizeCrop extends ActionBase
 		$this->strBackgroundColor     = $strBackgroundColor;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getWidth(): int
 	{
 		return $this->iWidth;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setWidth(int $iWidth): self
+	public function setWidth(int $iWidth): static
 	{
 		$oClone         = clone $this;
 		$oClone->iWidth = $iWidth;
@@ -70,18 +52,12 @@ class ResizeCrop extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getHeight(): int
 	{
 		return $this->iHeight;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setHeight(int $iHeight): self
+	public function setHeight(int $iHeight): static
 	{
 		$oClone          = clone $this;
 		$oClone->iHeight = $iHeight;
@@ -89,18 +65,12 @@ class ResizeCrop extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function getAllowStretching(): bool
 	{
 		return $this->bAllowStretching;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setAllowStretching(bool $bAllowStretching): self
+	public function setAllowStretching(bool $bAllowStretching): static
 	{
 		$oClone                   = clone $this;
 		$oClone->bAllowStretching = $bAllowStretching;
@@ -108,18 +78,12 @@ class ResizeCrop extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getVerticalAlignment(): string
 	{
 		return $this->strVerticalAlignment;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setVerticalAlignment(string $strVerticalAlignment): self
+	public function setVerticalAlignment(string $strVerticalAlignment): static
 	{
 		$oClone                       = clone $this;
 		$oClone->strVerticalAlignment = $strVerticalAlignment;
@@ -127,18 +91,12 @@ class ResizeCrop extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getHorizontalAlignment(): string
 	{
 		return $this->strHorizontalAlignment;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setHorizontalAlignment(string $strHorizontalAlignment): self
+	public function setHorizontalAlignment(string $strHorizontalAlignment): static
 	{
 		$oClone                         = clone $this;
 		$oClone->strHorizontalAlignment = $strHorizontalAlignment;
@@ -146,18 +104,12 @@ class ResizeCrop extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getBackgroundColor(): string
 	{
 		return $this->strBackgroundColor;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setBackgroundColor(string $strBackgroundColor): self
+	public function setBackgroundColor(string $strBackgroundColor): static
 	{
 		$oClone                     = clone $this;
 		$oClone->strBackgroundColor = $strBackgroundColor;

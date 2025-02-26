@@ -4,11 +4,6 @@ namespace Xicrow\PhpImage\Image\Action;
 use InvalidArgumentException;
 use Xicrow\PhpImage\Image\ActionBase;
 
-/**
- * Class DrawLine
- *
- * @package Xicrow\PhpImage\Image\Action
- */
 class DrawLine extends ActionBase
 {
 	protected int    $iStartHorizontalPosition;
@@ -19,8 +14,7 @@ class DrawLine extends ActionBase
 	protected float  $fTransparency;
 
 	/**
-	 * @param float $fTransparency
-	 * @return void
+	 * @throws InvalidArgumentException
 	 */
 	protected static function ValidateTransparency(float $fTransparency): void
 	{
@@ -29,14 +23,6 @@ class DrawLine extends ActionBase
 		}
 	}
 
-	/**
-	 * @param int    $iStartHorizontalPosition
-	 * @param int    $iStartVerticalPosition
-	 * @param int    $iEndHorizontalPosition
-	 * @param int    $iEndVerticalPosition
-	 * @param string $strColor
-	 * @param float  $fTransparency
-	 */
 	public function __construct(
 		int    $iStartHorizontalPosition = 0,
 		int    $iStartVerticalPosition = 0,
@@ -44,7 +30,8 @@ class DrawLine extends ActionBase
 		int    $iEndVerticalPosition = 0,
 		string $strColor = '#FFFFFF',
 		float  $fTransparency = 0.0
-	) {
+	)
+	{
 		static::ValidateTransparency($fTransparency);
 
 		$this->iStartHorizontalPosition = $iStartHorizontalPosition;
@@ -55,18 +42,12 @@ class DrawLine extends ActionBase
 		$this->fTransparency            = $fTransparency;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getStartVerticalPosition(): int
 	{
 		return $this->iStartVerticalPosition;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setStartVerticalPosition(int $iStartVerticalPosition): self
+	public function setStartVerticalPosition(int $iStartVerticalPosition): static
 	{
 		$oClone                         = clone $this;
 		$oClone->iStartVerticalPosition = $iStartVerticalPosition;
@@ -74,18 +55,12 @@ class DrawLine extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getStartHorizontalPosition(): int
 	{
 		return $this->iStartHorizontalPosition;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setStartHorizontalPosition(int $iStartHorizontalPosition): self
+	public function setStartHorizontalPosition(int $iStartHorizontalPosition): static
 	{
 		$oClone                           = clone $this;
 		$oClone->iStartHorizontalPosition = $iStartHorizontalPosition;
@@ -93,18 +68,12 @@ class DrawLine extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getEndVerticalPosition(): int
 	{
 		return $this->iEndVerticalPosition;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setEndVerticalPosition(int $iEndVerticalPosition): self
+	public function setEndVerticalPosition(int $iEndVerticalPosition): static
 	{
 		$oClone                       = clone $this;
 		$oClone->iEndVerticalPosition = $iEndVerticalPosition;
@@ -112,18 +81,12 @@ class DrawLine extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getEndHorizontalPosition(): int
 	{
 		return $this->iEndHorizontalPosition;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setEndHorizontalPosition(int $iEndHorizontalPosition): self
+	public function setEndHorizontalPosition(int $iEndHorizontalPosition): static
 	{
 		$oClone                         = clone $this;
 		$oClone->iEndHorizontalPosition = $iEndHorizontalPosition;
@@ -131,18 +94,12 @@ class DrawLine extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getColor(): string
 	{
 		return $this->strColor;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setColor(string $strColor): self
+	public function setColor(string $strColor): static
 	{
 		$oClone           = clone $this;
 		$oClone->strColor = $strColor;
@@ -150,18 +107,12 @@ class DrawLine extends ActionBase
 		return $oClone;
 	}
 
-	/**
-	 * @return float
-	 */
 	public function getTransparency(): float
 	{
 		return $this->fTransparency;
 	}
 
-	/**
-	 * @return static
-	 */
-	public function setTransparency(float $fTransparency): self
+	public function setTransparency(float $fTransparency): static
 	{
 		static::ValidateTransparency($fTransparency);
 

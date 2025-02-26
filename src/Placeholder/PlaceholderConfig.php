@@ -3,38 +3,24 @@ namespace Xicrow\PhpImage\Placeholder;
 
 use Xicrow\PhpImage\ConfigBase;
 
-/**
- * Class PlaceholderConfig
- *
- * @package Xicrow\PhpImage\Placeholder
- */
 class PlaceholderConfig extends ConfigBase
 {
-	protected int     $iWidth             = 0;
-	protected int     $iHeight            = 0;
-	protected ?string $strText            = null;
-	protected ?string $strBackgroundColor = null;
-	protected ?string $strTextColor       = null;
-	protected ?string $strFileExtension   = null;
+	protected int         $iWidth             = 0;
+	protected int         $iHeight            = 0;
+	protected string|null $strText            = null;
+	protected string|null $strBackgroundColor = null;
+	protected string|null $strTextColor       = null;
+	protected string|null $strFileExtension   = null;
 
-	/**
-	 * PlaceholderConfig constructor.
-	 *
-	 * @param int         $iWidth
-	 * @param int         $iHeight
-	 * @param string|null $strText
-	 * @param string|null $strBackgroundColor
-	 * @param string|null $strTextColor
-	 * @param string|null $strFileExtension
-	 */
 	public function __construct(
-		int     $iWidth = 0,
-		int     $iHeight = 0,
-		?string $strText = null,
-		?string $strBackgroundColor = null,
-		?string $strTextColor = null,
-		?string $strFileExtension = null
-	) {
+		int         $iWidth = 0,
+		int         $iHeight = 0,
+		string|null $strText = null,
+		string|null $strBackgroundColor = null,
+		string|null $strTextColor = null,
+		string|null $strFileExtension = null
+	)
+	{
 		$this->iWidth             = $iWidth;
 		$this->iHeight            = $iHeight;
 		$this->strText            = $strText;
@@ -43,19 +29,12 @@ class PlaceholderConfig extends ConfigBase
 		$this->strFileExtension   = $strFileExtension;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getWidth(): int
 	{
 		return $this->iWidth;
 	}
 
-	/**
-	 * @param int $iWidth
-	 * @return static
-	 */
-	public function setWidth(int $iWidth): self
+	public function setWidth(int $iWidth): static
 	{
 		$oClone         = clone $this;
 		$oClone->iWidth = $iWidth;
@@ -63,19 +42,12 @@ class PlaceholderConfig extends ConfigBase
 		return $oClone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getHeight(): int
 	{
 		return $this->iHeight;
 	}
 
-	/**
-	 * @param int $iHeight
-	 * @return static
-	 */
-	public function setHeight(int $iHeight): self
+	public function setHeight(int $iHeight): static
 	{
 		$oClone          = clone $this;
 		$oClone->iHeight = $iHeight;
@@ -83,19 +55,12 @@ class PlaceholderConfig extends ConfigBase
 		return $oClone;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getText(): ?string
+	public function getText(): string|null
 	{
 		return $this->strText;
 	}
 
-	/**
-	 * @param string|null $strText
-	 * @return static
-	 */
-	public function setText(?string $strText): self
+	public function setText(string|null $strText): static
 	{
 		$oClone          = clone $this;
 		$oClone->strText = $strText;
@@ -103,19 +68,12 @@ class PlaceholderConfig extends ConfigBase
 		return $oClone;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getBackgroundColor(): ?string
+	public function getBackgroundColor(): string|null
 	{
 		return $this->strBackgroundColor;
 	}
 
-	/**
-	 * @param string|null $strBackgroundColor
-	 * @return static
-	 */
-	public function setBackgroundColor(?string $strBackgroundColor): self
+	public function setBackgroundColor(string|null $strBackgroundColor): static
 	{
 		$oClone                     = clone $this;
 		$oClone->strBackgroundColor = $strBackgroundColor;
@@ -123,19 +81,12 @@ class PlaceholderConfig extends ConfigBase
 		return $oClone;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getTextColor(): ?string
+	public function getTextColor(): string|null
 	{
 		return $this->strTextColor;
 	}
 
-	/**
-	 * @param string|null $strTextColor
-	 * @return static
-	 */
-	public function setTextColor(?string $strTextColor): self
+	public function setTextColor(string|null $strTextColor): static
 	{
 		$oClone               = clone $this;
 		$oClone->strTextColor = $strTextColor;
@@ -143,19 +94,12 @@ class PlaceholderConfig extends ConfigBase
 		return $oClone;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getFileExtension(): ?string
+	public function getFileExtension(): string|null
 	{
 		return $this->strFileExtension;
 	}
 
-	/**
-	 * @param string|null $strFileExtension
-	 * @return static
-	 */
-	public function setFileExtension(?string $strFileExtension): self
+	public function setFileExtension(string|null $strFileExtension): static
 	{
 		$oClone                   = clone $this;
 		$oClone->strFileExtension = $strFileExtension;
