@@ -287,12 +287,12 @@ class GDLibrary extends AdapterBase
 		}
 
 		imageline(
-			$this->rCurrent,
-			$oAction->getStartHorizontalPosition(),
-			$oAction->getStartVerticalPosition(),
-			$oAction->getEndHorizontalPosition(),
-			$oAction->getEndVerticalPosition(),
-			$this->getColorIdentifierFromHex($oAction->getColor(), $oAction->getTransparency())
+			image: $this->rCurrent,
+			x1   : $oAction->getStartHorizontalPosition(),
+			y1   : $oAction->getStartVerticalPosition(),
+			x2   : $oAction->getEndHorizontalPosition(),
+			y2   : $oAction->getEndVerticalPosition(),
+			color: $this->getColorIdentifierFromHex($oAction->getColor(), $oAction->getTransparency()),
 		);
 
 		if ($oAction->getTransparency() > 0) {
@@ -307,12 +307,12 @@ class GDLibrary extends AdapterBase
 		}
 
 		imagefilledrectangle(
-			$this->rCurrent,
-			$oAction->getHorizontalPosition(),
-			$oAction->getVerticalPosition(),
-			$oAction->getHorizontalPosition() + $oAction->getWidth(),
-			$oAction->getVerticalPosition() + $oAction->getHeight(),
-			$this->getColorIdentifierFromHex($oAction->getColor(), $oAction->getTransparency())
+			image: $this->rCurrent,
+			x1   : $oAction->getHorizontalPosition(),
+			y1   : $oAction->getVerticalPosition(),
+			x2   : $oAction->getHorizontalPosition() + $oAction->getWidth(),
+			y2   : $oAction->getVerticalPosition() + $oAction->getHeight(),
+			color: $this->getColorIdentifierFromHex($oAction->getColor(), $oAction->getTransparency()),
 		);
 
 		if ($oAction->getTransparency() > 0) {
@@ -331,14 +331,14 @@ class GDLibrary extends AdapterBase
 		}
 
 		imagettftext(
-			$this->rCurrent,
-			$oAction->getSize(),
-			$oAction->getAngle(),
-			$oAction->getHorizontalPosition(),
-			$oAction->getVerticalPosition(),
-			$this->getColorIdentifierFromHex($oAction->getColor(), $oAction->getTransparency()),
-			$oAction->getFontFile(),
-			$oAction->getContent()
+			image        : $this->rCurrent,
+			size         : $oAction->getSize(),
+			angle        : $oAction->getAngle(),
+			x            : $oAction->getHorizontalPosition(),
+			y            : $oAction->getVerticalPosition(),
+			color        : $this->getColorIdentifierFromHex($oAction->getColor(), $oAction->getTransparency()),
+			font_filename: $oAction->getFontFile(),
+			text         : $oAction->getContent(),
 		);
 
 		if ($oAction->getTransparency() > 0) {
@@ -349,14 +349,14 @@ class GDLibrary extends AdapterBase
 	protected function processResizeCrop(ResizeCrop $oAction): void
 	{
 		// Get current width and height
-		$iCurrentWidth  = imagesx($this->rCurrent);
-		$iCurrentHeight = imagesy($this->rCurrent);
+		$iCurrentWidth  = (int)imagesx($this->rCurrent);
+		$iCurrentHeight = (int)imagesy($this->rCurrent);
 
 		// Check for missing dimensions
 		if ($oAction->getWidth() > 0 && $oAction->getHeight() <= 0) {
-			$oAction = $oAction->setHeight($iCurrentHeight * ($oAction->getWidth() / $iCurrentWidth));
+			$oAction = $oAction->setHeight((int)($iCurrentHeight * ($oAction->getWidth() / $iCurrentWidth)));
 		} elseif ($oAction->getHeight() > 0 && $oAction->getWidth() <= 0) {
-			$oAction = $oAction->setWidth($iCurrentWidth * ($oAction->getHeight() / $iCurrentHeight));
+			$oAction = $oAction->setWidth((int)($iCurrentWidth * ($oAction->getHeight() / $iCurrentHeight)));
 		} elseif ($oAction->getWidth() <= 0 && $oAction->getHeight() <= 0) {
 			$oAction = $oAction->setWidth($iCurrentWidth);
 			$oAction = $oAction->setHeight($iCurrentHeight);
@@ -386,9 +386,9 @@ class GDLibrary extends AdapterBase
 
 		// Calculate width or height of source
 		if ($fCompareWidth > $fCompareHeight) {
-			$srcW = round(($iCurrentWidth / $fCompareWidth * $fCompareHeight));
+			$srcW = (int)round(($iCurrentWidth / $fCompareWidth * $fCompareHeight));
 		} elseif ($fCompareHeight > $fCompareWidth) {
-			$srcH = round(($iCurrentHeight / $fCompareHeight * $fCompareWidth));
+			$srcH = (int)round(($iCurrentHeight / $fCompareHeight * $fCompareWidth));
 		}
 
 		$bIsUnderSized = false;
@@ -410,9 +410,9 @@ class GDLibrary extends AdapterBase
 
 			case ResizeCrop::Horizontal_Align_Center:
 				if (!$bIsUnderSized) {
-					$srcX = (($iCurrentWidth - $srcW) / 2);
+					$srcX = (int)(($iCurrentWidth - $srcW) / 2);
 				} else {
-					$dstX = (($oAction->getWidth() - $srcW) / 2);
+					$dstX = (int)(($oAction->getWidth() - $srcW) / 2);
 				}
 				break;
 
@@ -435,9 +435,9 @@ class GDLibrary extends AdapterBase
 
 			case ResizeCrop::Vertical_Align_Middle:
 				if (!$bIsUnderSized) {
-					$srcY = (($iCurrentHeight - $srcH) / 2);
+					$srcY = (int)(($iCurrentHeight - $srcH) / 2);
 				} else {
-					$dstY = (($oAction->getHeight() - $srcH) / 2);
+					$dstY = (int)(($oAction->getHeight() - $srcH) / 2);
 				}
 				break;
 
@@ -497,7 +497,18 @@ class GDLibrary extends AdapterBase
 		}
 
 		// Copy and resize part of the image with resampling
-		imagecopyresampled($rTemp, $this->rCurrent, $dstX, $dstY, $srcX, $srcY, $dstW, $dstH, $srcW, $srcH);
+		imagecopyresampled(
+			dst_image : $rTemp,
+			src_image : $this->rCurrent,
+			dst_x     : $dstX,
+			dst_y     : $dstY,
+			src_x     : $srcX,
+			src_y     : $srcY,
+			dst_width : $dstW,
+			dst_height: $dstH,
+			src_width : $srcW,
+			src_height: $srcH,
+		);
 
 		$this->rCurrent = $rTemp;
 	}
@@ -505,14 +516,14 @@ class GDLibrary extends AdapterBase
 	protected function processResizeFit(ResizeFit $oAction): void
 	{
 		// Get current width and height
-		$iCurrentWidth  = imagesx($this->rCurrent);
-		$iCurrentHeight = imagesy($this->rCurrent);
+		$iCurrentWidth  = (int)imagesx($this->rCurrent);
+		$iCurrentHeight = (int)imagesy($this->rCurrent);
 
 		// Check for missing dimensions
 		if ($oAction->getWidth() > 0 && $oAction->getHeight() <= 0) {
-			$oAction = $oAction->setHeight($iCurrentHeight * ($oAction->getWidth() / $iCurrentWidth));
+			$oAction = $oAction->setHeight((int)($iCurrentHeight * ($oAction->getWidth() / $iCurrentWidth)));
 		} elseif ($oAction->getHeight() > 0 && $oAction->getWidth() <= 0) {
-			$oAction = $oAction->setWidth($iCurrentWidth * ($oAction->getHeight() / $iCurrentHeight));
+			$oAction = $oAction->setWidth((int)($iCurrentWidth * ($oAction->getHeight() / $iCurrentHeight)));
 		} elseif ($oAction->getWidth() <= 0 && $oAction->getHeight() <= 0) {
 			$oAction = $oAction->setWidth($iCurrentWidth);
 			$oAction = $oAction->setHeight($iCurrentHeight);
@@ -540,10 +551,10 @@ class GDLibrary extends AdapterBase
 
 		// Get constrained image dimensions
 		[$iFitWidth, $iFitHeight] = static::ConstrainDimensions(
-			$iCurrentWidth * $iCurrentMultiplier,
-			$iCurrentHeight * $iCurrentMultiplier,
+			(int)($iCurrentWidth * $iCurrentMultiplier),
+			(int)($iCurrentHeight * $iCurrentMultiplier),
 			$iCanvasWidth,
-			$iCanvasHeight
+			$iCanvasHeight,
 		);
 
 		// If trim is enabled, adjust width and height to image dimensions
@@ -567,7 +578,7 @@ class GDLibrary extends AdapterBase
 			case ResizeFit::Horizontal_Align_Left:
 				break;
 			case ResizeFit::Horizontal_Align_Center:
-				$dstX = ($iCanvasWidth - $dstW) / 2;
+				$dstX = (int)(($iCanvasWidth - $dstW) / 2);
 				break;
 			case ResizeFit::Horizontal_Align_Right:
 				$dstX = $iCanvasWidth - $dstW;
@@ -580,7 +591,7 @@ class GDLibrary extends AdapterBase
 			case ResizeFit::Vertical_Align_Top:
 				break;
 			case ResizeFit::Vertical_Align_Middle:
-				$dstY = (($iCanvasHeight - $dstH) / 2);
+				$dstY = (int)(($iCanvasHeight - $dstH) / 2);
 				break;
 			case ResizeFit::Vertical_Align_Bottom:
 				$dstY = ($iCanvasHeight - $dstH);
@@ -633,7 +644,18 @@ class GDLibrary extends AdapterBase
 		}
 
 		// Copy and resize part of the image with resampling
-		imagecopyresampled($rTemp, $this->rCurrent, $dstX, $dstY, $srcX, $srcY, $dstW, $dstH, $srcW, $srcH);
+		imagecopyresampled(
+			dst_image : $rTemp,
+			src_image : $this->rCurrent,
+			dst_x     : $dstX,
+			dst_y     : $dstY,
+			src_x     : $srcX,
+			src_y     : $srcY,
+			dst_width : $dstW,
+			dst_height: $dstH,
+			src_width : $srcW,
+			src_height: $srcH,
+		);
 
 		$this->rCurrent = $rTemp;
 	}

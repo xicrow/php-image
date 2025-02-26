@@ -176,7 +176,7 @@ abstract class AdapterBase implements AdapterInterface
 	}
 
 	/**
-	 * @phpstan-return array{0: float|int, 1: float|int}
+	 * @phpstan-return array{0: int, 1: int}
 	 */
 	protected static function ConstrainDimensions(int $iCurrentWidth, int $iCurrentHeight, int $iMaxWidth = 0, int $iMaxHeight = 0): array
 	{
